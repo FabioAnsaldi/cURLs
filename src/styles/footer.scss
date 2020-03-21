@@ -1,0 +1,10 @@
+@import 'theme';
+
+.footer-component {
+    display: flex;
+    width: 100%;
+
+    x-card {
+        margin: 0 0 $base_margin 0;
+    }
+}

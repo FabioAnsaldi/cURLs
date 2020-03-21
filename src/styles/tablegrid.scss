@@ -1,0 +1,38 @@
+@import 'theme';
+
+.tablegrid-component {
+    display: block;
+    width: 100%;
+
+    x-card {
+
+        & > main {
+            padding: 0;
+
+            .react-grid-HeaderRow {
+                overflow: hidden;
+            }
+            .react-grid-Canvas {
+                overflow: initial !important;
+
+                .react-grid-Cell {
+                    padding: 0 !important;
+                }
+
+                .react-grid-Cell__value {
+                    margin: 0 8px;
+                }
+            }
+            x-button {
+                color: $error_color;
+            }
+        }
+        & > header {
+            padding: 10px 5px;
+
+            h4 {
+                margin: 0;
+            }
+        }
+    }
+}

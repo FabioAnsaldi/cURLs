@@ -1,0 +1,28 @@
+@import 'theme';
+
+/* WebComponent */
+x-input {
+    max-width: 100%;
+    width: 100%;    
+}
+
+html, body, .app {
+    height: 100%;
+    --primary-color: #{$primary_color};
+    --secondary-color: #{$secondary_color};
+    --accent-color: #{$accent_color};
+    --link-color: #{$link_color};
+    --text-color: #{$text_color};
+}
+
+.app > div {
+    & > main {
+        margin: -$base_margin * 2 $base_margin;
+    }
+    
+    & > footer {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+    }
+}
