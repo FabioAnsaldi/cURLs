@@ -2,8 +2,10 @@
 
 import React from 'react'
 import TableGrig from './TableGrid'
+import TextInput from './TextInput';
+import SelectBox from './SelectBox';
 
-const methods = [
+const queryMethods = [
     {value: 'get', toggled: true},
     {value: 'post'},
     {value: 'put'},
@@ -21,75 +23,27 @@ const othersColumns = [
     { key: "action", name: "Action" }
 ]
 
-const getDefaultMethods = (curlObject, methodsArray) => {
-
-    let value = 'get'
-    if (
-        (curlObject.data && curlObject.data.length > 0) || 
-        (curlObject.dataBinary && curlObject.dataBinary.length > 0)
-    ) {
-        value = 'post'
-    }
-    if (curlObject.method) {
-        value = curlObject.method.toLowerCase()
-    }
-
-    return methodsArray.map(obj => {
-        obj.value === value ? obj.toggled = true : delete obj.toggled
-        return obj;
-    })
-}
-
 const KeyValue = props => {
 
     const { curlState, setCurlState } = props
-    const methodsState = getDefaultMethods(curlState, methods)
 
     const handleSetCurlState = (state, groupName) => {
         
         const newState = {...curlState}
 
-        newState[groupName] = state
-        setCurlState(newState)
-    }
-
-    const handleSetToggled = event => {
-
-        const newState = {...curlState}
-        const value = event.currentTarget.value
-
-        methodsState.map(obj => {
-            obj.value === value ? obj.toggled = true : delete obj.toggled
-            return obj;
-        })
-        newState.method = methodsState.filter(obj => obj.toggled === true)[0]['value']
-        setCurlState(newState)
-    }
-
-    const handleSetQueryString = (event) => {
-
-        const newState = {...curlState}
-        const value = event.currentTarget.value
-
-        newState.query = value
-        setCurlState(newState)
+        if (groupName) {
+            newState[groupName] = state
+            setCurlState(newState)
+        } else {
+            setCurlState(state)
+        }
     }
 
     return (
         <div className="keyvalue-component">
             <x-box>
-                <x-select>
-                    <x-menu>
-                    {methodsState.map(obj => (
-                        <x-menuitem key={obj.value} onClick={handleSetToggled} {...obj}>
-                            <x-label>{obj.value.toUpperCase()}</x-label>
-                        </x-menuitem>
-                    ))}
-                    </x-menu>
-                </x-select>
-                <x-input type="url" value={curlState.query} onBlur={handleSetQueryString}>
-                    <x-icon name="public"></x-icon>
-                </x-input>
+                <SelectBox data={curlState} options={queryMethods} setCurlState={handleSetCurlState} />
+                <TextInput type="url" data={curlState} setCurlState={handleSetCurlState} />
             </x-box>
             {curlState.headers && curlState.headers.length > 0 &&
                 <TableGrig

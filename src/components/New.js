@@ -7,10 +7,11 @@ import KeyValue from './KeyValue'
 const New = () => {
 
     const [tabState, setTabState] = useState(0)
-    const [curlState, setCurlState] = useState({})
+    const [curlState, setCurlState] = useState(JSON.parse(localStorage.getItem("cURLs")) || {})
 
     const handleSetCurlState = state => {
         
+        localStorage.setItem("cURLs", JSON.stringify(state))
         setCurlState(state)
     }
 

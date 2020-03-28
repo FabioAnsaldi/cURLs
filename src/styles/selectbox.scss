@@ -1,0 +1,10 @@
+@import 'theme';
+
+.selectbox-component {
+    display: inline-block;
+    width: auto;
+
+    x-select {
+        height: 34px;
+    }
+}

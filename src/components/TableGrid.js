@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react'
+import React, {useRef} from 'react'
 import ReactDataGrid from 'react-data-grid'
 
 const getMinHeigth = number => {
@@ -13,6 +13,7 @@ const getMinHeigth = number => {
 const TableGrid = props => {
 
     const { columns, data, enableCellSelect, setCurlState, title } = props
+    const refTableGrid = useRef(null);
 
     const onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
 
@@ -43,11 +44,27 @@ const TableGrid = props => {
                     }
                     return accumulator
                 }, [])
-
+                
                 setCurlState(newState, title.key)
             }
         }];
         return column.key === "action" ? cellActions : null
+    }
+
+    const onCellSelected = props => {
+
+        const last = parseInt(Object.keys(columns)[Object.keys(columns).length-1])
+
+        if (!refTableGrid.current) {
+            return false
+        }
+        let node = refTableGrid.current.grid.querySelector('.rdg-selected')
+        if (last === props.idx) {
+            node.parentNode.style.display = 'none'
+        } else {
+            node.parentNode.style.display = 'block'
+        }
+        return true;
     }
 
     return (
@@ -58,12 +75,14 @@ const TableGrid = props => {
                 </header>
                 <main>
                     <ReactDataGrid
+                        ref={refTableGrid}
                         columns={columns}
                         rowGetter={i => data[i]}
                         rowsCount={data.length}
                         minHeight={getMinHeigth(data.length)}
                         enableCellSelect={enableCellSelect}
                         onGridRowsUpdated={onGridRowsUpdated}
+                        onCellSelected={onCellSelected}
                         getCellActions={getCellActions} />
                 </main>
             </x-card>

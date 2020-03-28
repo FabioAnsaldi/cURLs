@@ -4,10 +4,16 @@ import React from 'react'
 
 const getDefaultText = (curlObject) => {
 
-    let text = "curl"
-    if (!curlObject.headers || curlObject.headers.length === 0) {
-        return ""
+    if (
+        (!curlObject.headers || curlObject.headers.length === 0) &&
+        (!curlObject.others || curlObject.others.length === 0) &&
+        !curlObject.querystring &&
+        !curlObject.dataBinary &&
+        !curlObject.data
+    ) {
+        return "";
     }
+    let text = "curl"
     if (curlObject.method) {
         text += ` -X ${curlObject.method.toUpperCase()}`
     } else if (!curlObject.data && ! curlObject.dataBinary) {
@@ -18,9 +24,12 @@ const getDefaultText = (curlObject) => {
     if (curlObject.query) {
         text += ` '${curlObject.query}'`
     }
-    let headers = curlObject.headers.map((header) => {
-        return ` -H '${header.key}:${header.value}'`
-    })
+    let headers = []
+    if (curlObject.headers) {
+        headers = curlObject.headers.map((header) => {
+            return ` -H '${header.key}:${header.value}'`
+        })
+    }
     text += headers.join(' ')
     if (curlObject.data) {
         text += ` --data '${curlObject.dataBinary}`
@@ -28,9 +37,12 @@ const getDefaultText = (curlObject) => {
     if (curlObject.dataBinary) {
         text += ` --data-binary '${curlObject.dataBinary}`
     }
-    let others = curlObject.others.map((other) => {
-        return ` --${other.key}`
-    })
+    let others = []
+    if (curlObject.others) {
+        others = curlObject.others.map((other) => {
+            return ` --${other.key}`
+        })
+    }
     text += others.join(' ')
     return text
 }
@@ -62,7 +74,7 @@ const getParams = (curl, regex, exclude = []) => {
             result.push(m[1])
         }
     }
-    return result.length > 0 ? result :  ['']
+    return result.length > 0 ? result : []
 }
 
 const RawText = props => {

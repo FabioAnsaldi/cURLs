@@ -17,10 +17,9 @@ const Layout = () => {
     }
 
     useEffect(() => {
-
-        setLoaded(true)
         
-    }, [])
+        setLoaded(true)
+    })
 
     return (
         <div className="layout-component">
