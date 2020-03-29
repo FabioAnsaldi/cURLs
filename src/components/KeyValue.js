@@ -23,6 +23,21 @@ const othersColumns = [
     { key: "action", name: "Action" }
 ]
 
+const getDefaultMethod = (curlObject) => {
+
+    let value = 'get'
+    if (
+        (curlObject.data && curlObject.data.length > 0) || 
+        (curlObject.dataBinary && curlObject.dataBinary.length > 0)
+    ) {
+        value = 'post'
+    }
+    if (curlObject.method) {
+        value = curlObject.method.toLowerCase()
+    }
+    return value
+}
+
 const KeyValue = props => {
 
     const { curlState, setCurlState } = props
@@ -42,9 +57,10 @@ const KeyValue = props => {
     return (
         <div className="keyvalue-component">
             <x-box>
-                <SelectBox data={curlState} options={queryMethods} setCurlState={handleSetCurlState} />
-                <TextInput type="url" data={curlState} setCurlState={handleSetCurlState} />
+                <SelectBox method={getDefaultMethod(curlState)} options={queryMethods} setCurlState={handleSetCurlState} />
+                <TextInput type="url" query={curlState.query} setCurlState={handleSetCurlState} />
             </x-box>
+            <x-box>
             {curlState.headers && curlState.headers.length > 0 &&
                 <TableGrig
                     columns={headersColumns}
@@ -56,6 +72,8 @@ const KeyValue = props => {
                     setCurlState={handleSetCurlState}
                     enableCellSelect={true} />
             }
+            </x-box>
+            <x-box>
             {curlState.others && curlState.others.length > 0 &&
                 <TableGrig
                     columns={othersColumns}
@@ -67,6 +85,7 @@ const KeyValue = props => {
                     setCurlState={handleSetCurlState}
                     enableCellSelect={true} />
             }
+            </x-box>
         </div>
     )
 }

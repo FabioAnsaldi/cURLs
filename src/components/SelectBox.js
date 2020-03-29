@@ -2,18 +2,8 @@
 
 import React from 'react'
 
-const getDefaultMethods = (curlObject, methodsArray) => {
+const getDefaultOptions = (value, methodsArray) => {
 
-    let value = 'get'
-    if (
-        (curlObject.data && curlObject.data.length > 0) || 
-        (curlObject.dataBinary && curlObject.dataBinary.length > 0)
-    ) {
-        value = 'post'
-    }
-    if (curlObject.method) {
-        value = curlObject.method.toLowerCase()
-    }
     return methodsArray.map(obj => {
         obj.value === value ? obj.toggled = true : delete obj.toggled
         return obj;
@@ -22,20 +12,20 @@ const getDefaultMethods = (curlObject, methodsArray) => {
 
 const SelectBox = props => {
     
-    const { data, setCurlState, options } = props
-    const optionsState = getDefaultMethods(data, options)
+    const { method, setCurlState, options } = props
+    const optionsState = getDefaultOptions(method, options)
 
     const handleSetToggled = event => {
 
-        const newState = {...data}
         const value = event.currentTarget.value
 
         optionsState.map(obj => {
             obj.value === value ? obj.toggled = true : delete obj.toggled
             return obj;
         })
-        newState.method = optionsState.filter(obj => obj.toggled === true)[0]['value']
-        setCurlState(newState)
+        const newValue = optionsState.filter(obj => obj.toggled === true)[0]['value']
+
+        setCurlState(newValue, 'method')
     }
 
     return (

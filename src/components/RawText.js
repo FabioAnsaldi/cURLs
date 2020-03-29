@@ -7,7 +7,7 @@ const getDefaultText = (curlObject) => {
     if (
         (!curlObject.headers || curlObject.headers.length === 0) &&
         (!curlObject.others || curlObject.others.length === 0) &&
-        !curlObject.querystring &&
+        !curlObject.query &&
         !curlObject.dataBinary &&
         !curlObject.data
     ) {
@@ -63,7 +63,6 @@ const parseString = curlObject => {
 const getParams = (curl, regex, exclude = []) => {
         
     let result = [], m = null;
-
     while ((m = regex.exec(curl)) !== null) {
         // This is necessary to avoid infinite loops with zero-width matches
         if (m.index === regex.lastIndex) {

@@ -38,8 +38,18 @@ const New = () => {
                         </x-tab>
                     </x-tabs>
                     <br/>
-                    {tabState == 0 && <RawText curlState={curlState} setCurlState={handleSetCurlState}/>}
-                    {tabState == 1 && <KeyValue curlState={curlState} setCurlState={handleSetCurlState}/>}
+                    {tabState == 0 &&
+                        <RawText
+                            key={JSON.stringify(curlState)}
+                            curlState={curlState}
+                            setCurlState={handleSetCurlState} />
+                    }
+                    {tabState == 1 &&
+                        <KeyValue
+                            key={JSON.stringify(curlState)}
+                            curlState={curlState}
+                            setCurlState={handleSetCurlState} />
+                    }
                     <br/>
                     <div className="submit">
                         <x-button>

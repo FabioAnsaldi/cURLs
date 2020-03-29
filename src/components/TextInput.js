@@ -4,20 +4,18 @@ import React from 'react'
 
 const TextInput = props => {
 
-    const { data, setCurlState, type } = props
+    const { query, setCurlState, type } = props
 
     const handleSetQueryString = event => {
 
-        const newState = {...data}
         const value = event.currentTarget.value
 
-        newState.query = value
-        setCurlState(newState)
+        setCurlState(value, 'query')
     }
 
     return (
         <div className="textinput-component">
-            <x-input type={type} value={data.query} onBlur={handleSetQueryString}>
+            <x-input type={type} value={query} onBlur={handleSetQueryString}>
                 <x-icon name="public"></x-icon>
             </x-input>
         </div>
