@@ -1,0 +1,22 @@
+@import 'theme';
+
+.dataform-component {
+    display: block;
+    width: 100%;
+
+    x-radios {
+        display: block;
+        margin-bottom: $base_margin;
+        
+        x-box {
+            display: inline-block;
+            width: 25%;
+
+            .__radio {
+                display: inline-flex;
+                align-items: center;
+                width: 50%;
+            }
+        }
+    }
+}

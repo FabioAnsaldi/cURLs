@@ -2,8 +2,9 @@
 
 import React from 'react'
 import TableGrig from './TableGrid'
-import TextInput from './TextInput';
-import SelectBox from './SelectBox';
+import TextInput from './TextInput'
+import SelectBox from './SelectBox'
+import DataForm from './DataForm'
 
 const queryMethods = [
     {value: 'get', toggled: true},
@@ -60,32 +61,27 @@ const KeyValue = props => {
                 <SelectBox method={getDefaultMethod(curlState)} options={queryMethods} setCurlState={handleSetCurlState} />
                 <TextInput type="url" query={curlState.query} setCurlState={handleSetCurlState} />
             </x-box>
-            <x-box>
-            {curlState.headers && curlState.headers.length > 0 &&
-                <TableGrig
-                    columns={headersColumns}
-                    data={curlState.headers}
-                    title={{
-                        key: 'headers',
-                        value: 'Headers parameters'
-                    }}
-                    setCurlState={handleSetCurlState}
-                    enableCellSelect={true} />
-            }
-            </x-box>
-            <x-box>
-            {curlState.others && curlState.others.length > 0 &&
-                <TableGrig
-                    columns={othersColumns}
-                    data={curlState.others}
-                    title={{
-                        key: 'others',
-                        value: 'Others parameters'
-                    }}
-                    setCurlState={handleSetCurlState}
-                    enableCellSelect={true} />
-            }
-            </x-box>
+            <TableGrig
+                key={JSON.stringify(curlState.headers)}
+                columns={headersColumns}
+                data={curlState.headers}
+                title={{
+                    key: 'headers',
+                    value: 'Headers parameters'
+                }}
+                setCurlState={handleSetCurlState}
+                enableCellSelect={true} />
+            <TableGrig
+                key={JSON.stringify(curlState.others)}
+                columns={othersColumns}
+                data={curlState.others}
+                title={{
+                    key: 'others',
+                    value: 'Others parameters'
+                }}
+                setCurlState={handleSetCurlState}
+                enableCellSelect={true} />
+            <DataForm dataSet={curlState} setCurlState={handleSetCurlState} />
         </div>
     )
 }

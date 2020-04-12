@@ -15,7 +15,7 @@ const New = () => {
         setCurlState(state)
     }
 
-    const handleClick = event => {
+    const handleTabClick = event => {
 
         const index = parseInt(event.currentTarget.dataset.index)
 
@@ -30,10 +30,10 @@ const New = () => {
                 </header>
                 <main>
                     <x-tabs>
-                        <x-tab onClick={handleClick} data-index="0" selected>
+                        <x-tab onClick={handleTabClick} data-index="0" selected>
                             <x-label>Raw</x-label>
                         </x-tab>
-                        <x-tab onClick={handleClick} data-index="1">
+                        <x-tab onClick={handleTabClick} data-index="1">
                             <x-label>Key - Value</x-label>
                         </x-tab>
                     </x-tabs>

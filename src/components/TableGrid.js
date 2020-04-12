@@ -1,6 +1,6 @@
 'use strict';
 
-import React, {useRef} from 'react'
+import React, { useRef } from 'react'
 import ReactDataGrid from 'react-data-grid'
 
 const getMinHeigth = number => {
@@ -10,9 +10,22 @@ const getMinHeigth = number => {
     return konst * (number + 1)
 }
 
+const getDefaultData = (arrayData, keys) => {
+
+    if (arrayData.length === 0) {
+        const newData = {...keys}
+
+        newData[0].key = ''
+        return [newData[0]]
+    } else {
+        return arrayData
+    }
+}
+
 const TableGrid = props => {
 
     const { columns, data, enableCellSelect, setCurlState, title } = props
+    const defaultData = getDefaultData(data || [], columns)
     const refTableGrid = useRef(null);
 
     const handleOnCellSelected = props => {
@@ -33,11 +46,10 @@ const TableGrid = props => {
 
     const handleOnGridRowsUpdated = ({ fromRow, toRow, updated }) => {
 
-        const newState = [...data]
         const index = Object.keys(updated)[0];
 
-        newState[fromRow][index] = updated[index]
-        setCurlState(newState, title.key)
+        defaultData[fromRow][index] = updated[index]
+        setCurlState(defaultData, title.key)
     }
     
     const getCellActions = (column, row) => {
@@ -46,7 +58,7 @@ const TableGrid = props => {
             icon: <x-button><x-icon name="delete-forever"></x-icon></x-button>,
             callback: () => {
     
-                const newState = data.reduce((accumulator, current) => {
+                const newState = defaultData.reduce((accumulator, current) => {
                     if (current !== row) {
                         accumulator.push(current)
                     }
@@ -67,12 +79,12 @@ const TableGrid = props => {
                 </header>
                 <main>
                     <ReactDataGrid
-                        key={JSON.stringify(data)}
+                        key={JSON.stringify(defaultData)}
                         ref={refTableGrid}
                         columns={columns}
-                        rowGetter={i => data[i]}
-                        rowsCount={data.length}
-                        minHeight={getMinHeigth(data.length)}
+                        rowGetter={i => defaultData[i]}
+                        rowsCount={defaultData.length}
+                        minHeight={getMinHeigth(defaultData.length)}
                         enableCellSelect={enableCellSelect}
                         onGridRowsUpdated={handleOnGridRowsUpdated}
                         onCellSelected={handleOnCellSelected}
