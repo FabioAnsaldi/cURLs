@@ -38,13 +38,13 @@ const New = () => {
                         </x-tab>
                     </x-tabs>
                     <br/>
-                    {tabState == 0 &&
+                    {tabState === 0 &&
                         <RawText
                             key={JSON.stringify(curlState)}
                             curlState={curlState}
                             setCurlState={handleSetCurlState} />
                     }
-                    {tabState == 1 &&
+                    {tabState === 1 &&
                         <KeyValue
                             key={JSON.stringify(curlState)}
                             curlState={curlState}

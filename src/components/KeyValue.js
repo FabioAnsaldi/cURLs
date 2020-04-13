@@ -62,7 +62,6 @@ const KeyValue = props => {
                 <TextInput type="url" query={curlState.query} setCurlState={handleSetCurlState} />
             </x-box>
             <TableGrig
-                key={JSON.stringify(curlState.headers)}
                 columns={headersColumns}
                 data={curlState.headers}
                 title={{
@@ -72,7 +71,6 @@ const KeyValue = props => {
                 setCurlState={handleSetCurlState}
                 enableCellSelect={true} />
             <TableGrig
-                key={JSON.stringify(curlState.others)}
                 columns={othersColumns}
                 data={curlState.others}
                 title={{

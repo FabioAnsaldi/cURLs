@@ -15,7 +15,7 @@ const tryConnection = () => client.connect( {
     }, () => {
 
         client.end();
-        if(!startedElectron) {
+        if (!startedElectron) {
             
             console.log('Starting electron ...');
             startedElectron = true;

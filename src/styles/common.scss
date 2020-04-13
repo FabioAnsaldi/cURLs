@@ -8,21 +8,53 @@ x-input {
 
 html, body, .app {
     height: 100%;
+}
+
+.app {
     --primary-color: #{$primary_color};
     --secondary-color: #{$secondary_color};
     --accent-color: #{$accent_color};
     --link-color: #{$link_color};
     --text-color: #{$text_color};
-}
 
-.app > div {
-    & > main {
-        margin: -$base_margin * 2 $base_margin;
+    --info-color: #{$info_color};
+    --info-bg-color: #{$info_bg_color};
+    --success-color: #{$success_color};
+    --success-bg-color: #{$success_bg_color};
+    --warning-color: #{$warning_color};
+    --warning-bg-color: #{$warning_bg_color};
+    --error-color: #{$error_color};
+    --eror-bg-color: #{$eror_bg_color};
+
+    .-info {
+        background-color: var(--info-bg-color);
+        color: var(--info-color);
     }
-    
-    & > footer {
-        position: fixed;
-        width: 100%;
-        bottom: 0;
+
+    .-warning {
+        background-color: var(--success-bg-color);
+        color: var(--success-color);
+    }
+
+    .-warning {
+        background-color: var(--warning-bg-color);
+        color: var(--warning-color);
+    }
+
+    .-error {
+        background-color: var(--error-bg-color);
+        color: var(--error-color);
+    }
+
+    & > div {
+        & > main {
+            margin: -$base_margin * 2 $base_margin;
+        }
+        
+        & > footer {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
     }
 }

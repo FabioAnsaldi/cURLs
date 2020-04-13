@@ -12,14 +12,35 @@ const getMinHeigth = number => {
 
 const getDefaultData = (arrayData, keys) => {
 
-    if (arrayData.length === 0) {
-        const newData = {...keys}
+    const newData = [ ...arrayData ];
 
-        newData[0].key = ''
-        return [newData[0]]
-    } else {
-        return arrayData
+    let fulledRow = 0
+    newData.forEach(data => {
+        let full = 0
+        keys.forEach(obj => {
+            if (obj.key !== 'action' && data[obj.key] && data[obj.key] !== '') {
+                full++
+            }
+        }); 
+        if (full === keys.length - 1) {
+            fulledRow++
+        }
+    });
+    if (newData.length === 0 || newData.length === fulledRow) {
+        newData.push({ key: '' })
     }
+
+    return newData
+}
+
+const removeEmptyRows = data => {
+    
+    return data.reduce((total, obj) => {
+        if (obj.key !== '') {
+            total.push(obj)
+        }
+        return total
+    }, [])
 }
 
 const TableGrid = props => {
@@ -49,7 +70,8 @@ const TableGrid = props => {
         const index = Object.keys(updated)[0];
 
         defaultData[fromRow][index] = updated[index]
-        setCurlState(defaultData, title.key)
+        let newState = removeEmptyRows(defaultData);
+        setCurlState(newState, title.key)
     }
     
     const getCellActions = (column, row) => {
@@ -58,13 +80,13 @@ const TableGrid = props => {
             icon: <x-button><x-icon name="delete-forever"></x-icon></x-button>,
             callback: () => {
     
-                const newState = defaultData.reduce((accumulator, current) => {
+                let newState = defaultData.reduce((accumulator, current) => {
                     if (current !== row) {
                         accumulator.push(current)
                     }
                     return accumulator
                 }, [])
-                
+                newState = removeEmptyRows(newState)
                 setCurlState(newState, title.key)
             }
         }];
@@ -79,7 +101,6 @@ const TableGrid = props => {
                 </header>
                 <main>
                     <ReactDataGrid
-                        key={JSON.stringify(defaultData)}
                         ref={refTableGrid}
                         columns={columns}
                         rowGetter={i => defaultData[i]}

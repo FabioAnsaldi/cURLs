@@ -1,6 +1,6 @@
 'use strict';
 
-import React from 'react'
+import React, { useRef } from 'react'
 
 const regexs = [
     { key: 'headers', value: /-H\s*\'(.*?)\'/gm },
@@ -20,7 +20,7 @@ const getParams = (curl, regex, exclude = []) => {
             regex.lastIndex++
         }
         // The result can be accessed through the `m`-variable.
-        if ( !exclude.includes(m[1]) ) {
+        if (!exclude.includes(m[1])) {
             result.push(m[1])
         }
     }
@@ -30,50 +30,46 @@ const getParams = (curl, regex, exclude = []) => {
 
 const setCleanText = (curlObject) => {
 
+    const newObject = { ...curlObject }
+
     let text = "curl"
-    if (curlObject.method) {
-        text += ` -X ${curlObject.method.toUpperCase()}`
-    } else if (!curlObject.data && ! curlObject.dataBinary) {
+    if (newObject.method) {
+        text += ` -X ${newObject.method.toUpperCase()}`
+    } else if (!newObject.data && ! newObject.dataBinary) {
         text += " -X GET"
     } else {
         text += " -X POST"
     }
-    if (curlObject.query) {
-        text += ` '${curlObject.query}'`
+    if (newObject.query) {
+        text += ` '${newObject.query}'`
     }
     let headers = []
-    if (curlObject.headers) {
-        headers = curlObject.headers.map((header) => {
-            return ` -H '${header.key}: ${header.value}'`
+    if (newObject.headers) {
+        headers = newObject.headers.map((header) => {
+            return ` -H '${header.key}: ${header.value || ''}'`
         })
     }
     text += headers.join(' ')
-    if (curlObject.data) {
-        text += ` --data '${curlObject.data}'`
+    if (newObject.data) {
+        text += ` --data '${newObject.data}'`
     }
-    if (curlObject.dataBinary) {
-        text += ` --data-binary '${curlObject.dataBinary}'`
+    if (newObject.dataBinary) {
+        text += ` --data-binary '${newObject.dataBinary}'`
     }
     let others = []
-    if (curlObject.others) {
-        others = curlObject.others.map((other) => {
+    if (newObject.others) {
+        others = newObject.others.map((other) => {
             return ` --${other.key}`
         })
     }
     text += others.join(' ')
-    if (
-        (!curlObject.headers || curlObject.headers.length === 0) &&
-        (!curlObject.others || curlObject.others.length === 0) &&
-        !curlObject.query &&
-        !curlObject.dataBinary &&
-        !curlObject.data
-    ) {
-        curlObject.cleaned = ""
+    if (text.length <= 'curl -X DELETE'.length) {
+        newObject.cleaned = ""
     } else {
-        curlObject.cleaned = text
+        newObject.cleaned = text
     }
     
-    return curlObject
+    return newObject
 }
 
 const parseString = curlObject => {
@@ -89,19 +85,49 @@ const parseString = curlObject => {
     }) : []
 }
 
+const createNodeErrors = curl => {
+
+    const styles = 'color: #D8000C; background-color: #FFD2D2'
+
+    let result = regexs.reduce((total, regex) => {
+        return total.replace(regex.value, '')
+    }, curl);
+    result = result.replace('curl', '').trim()
+    if (result !== '') {
+        result = curl.replace(result, `<span style="${styles}">${result}</span>`)
+    }
+
+    return result
+}
+
+const getStateParams = (state, string) => {
+
+    const newState = { ...state }
+
+    regexs.forEach(regex => {
+        newState[regex.key] = getParams(string, regex.value, regex.exclude)
+    });
+
+    return newState
+}
+
 const RawText = props => {
 
-    const { curlState, setCurlState } = props
+    const { curlState, setCurlState, checkTextError } = props
     const dataObject = setCleanText(curlState)
+    const refTextArea = useRef(null);
 
-    const handleKeyUp = event => {
+    const setCurlText = html => {
 
-        const value = event.currentTarget.value
-        const newState = { ...curlState }
+        if (refTextArea.current) {
+            refTextArea.current['#editor'].innerHTML = html
+        }
+    }
 
-        regexs.forEach(regex => {
-            newState[regex.key] = getParams(value, regex.value, regex.exclude)
-        });
+    const setNewState = value => {
+
+        const newState = getStateParams(curlState, value)
+
         newState.headers = parseString(newState.headers)
         newState.query = newState.querystring[0]
         newState.method = newState.method[0]
@@ -111,10 +137,25 @@ const RawText = props => {
         setCurlState(newState)
     }
 
+    const handleOnBlur = event => {
+
+        const value = event.currentTarget.value
+        
+        let errors = createNodeErrors(value)
+        if (errors) {
+            return setCurlText(errors)
+        }
+        setNewState(value)
+    }
+
     return (
         <div className="rawtext-component">
             <x-box>
-                <x-textarea tabIndex={0} value={dataObject.cleaned} onBlur={handleKeyUp}>
+                <x-textarea
+                ref={refTextArea}
+                tabIndex={0}
+                value={dataObject.cleaned}
+                onBlur={handleOnBlur}>
                     <x-label>curl 'http://api.example.net/' -H 'Connection: keep-alive' -H 'Cache-Control: max-age=0' ...</x-label>
                 </x-textarea>
             </x-box>
