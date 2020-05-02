@@ -52,8 +52,7 @@ const setCleanText = (curlObject) => {
     text += headers.join(' ')
     if (newObject.data) {
         text += ` --data '${newObject.data}'`
-    }
-    if (newObject.dataBinary) {
+    } else if (newObject.dataBinary) {
         text += ` --data-binary '${newObject.dataBinary}'`
     }
     let others = []

@@ -1,6 +1,6 @@
 'use strict';
 
-import React, { useState } from 'react'
+import React from 'react'
 
 const getDefaultData = obj => {
 
@@ -11,7 +11,7 @@ const getDefaultData = obj => {
     }
 }
 
-const getDefaultTabState = obj => {
+const getDefaultTabSelected = obj => {
 
     if (obj.dataBinary && obj.dataBinary != '') {
         return 1
@@ -33,21 +33,36 @@ const DataForm = props => {
 
     const { dataSet, setCurlState } = props
     const defaultData = getDefaultData(dataSet)
-    const [tabState, setTabState] = useState(getDefaultTabState(dataSet))
+    
+    let tabSelected = getDefaultTabSelected(dataSet)
 
     const handleTabClick = event => {
 
-        const index = parseInt(event.currentTarget.dataset.index)
+        tabSelected = parseInt(event.currentTarget.dataset.index)
+        const newState = {...dataSet}
 
-        setTabState(index)
+        if (tabSelected == 0) {
+            newState.data = defaultData
+            delete newState.dataBinary
+        } else {
+            newState.dataBinary = defaultData
+            delete newState.data
+        }
+        setCurlState(newState)
     }
     
     const handleTextKeyUp = event => {
 
-        const type = tabState == 0 ? 'data' : 'dataBinary'
         const value = event.currentTarget.value
 
-        setCurlState(value, type)
+        if (tabSelected == 0) {
+            newState.data = value
+            delete newState.dataBinary
+        } else {
+            newState.dataBinary = value
+            delete newState.data
+        }
+        setCurlState(newState)
     }
 
     return (
@@ -55,11 +70,11 @@ const DataForm = props => {
             <x-radios>
                 <x-box>
                     <div className="__radio">
-                        <x-radio onClick={handleTabClick} data-index="0" id="data-radio" {...getToggledState(0, tabState)}></x-radio>
+                        <x-radio onClick={handleTabClick} data-index="0" id="data-radio" {...getToggledState(0, tabSelected)}></x-radio>
                         <x-label for="data-radio" id="data-label">Data</x-label>
                     </div>
                     <div className="__radio">
-                        <x-radio onClick={handleTabClick} data-index="1" id="data-binary-radio" {...getToggledState(1, tabState)}></x-radio>
+                        <x-radio onClick={handleTabClick} data-index="1" id="data-binary-radio" {...getToggledState(1, tabSelected)}></x-radio>
                         <x-label for="data-binary-radio" id="data-binary-label">Data-Binary</x-label>
                     </div>
                 </x-box>

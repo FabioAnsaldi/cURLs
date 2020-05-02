@@ -4,7 +4,7 @@ const client = new net.Socket();
 
 client.on('error', (error) => {
     console.log('We are still waiting ...');
-    setTimeout(tryConnection, 1000);
+    setTimeout(tryConnection, 1500);
 });
 
 let startedElectron = false;

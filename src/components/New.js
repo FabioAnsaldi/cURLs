@@ -6,8 +6,9 @@ import KeyValue from './KeyValue'
 
 const New = () => {
 
+    const dataFromStorage = JSON.parse(localStorage.getItem("cURLs")) || {}
     const [tabState, setTabState] = useState(0)
-    const [curlState, setCurlState] = useState(JSON.parse(localStorage.getItem("cURLs")) || {})
+    const [curlState, setCurlState] = useState(dataFromStorage)
 
     const handleSetCurlState = state => {
         
@@ -40,13 +41,11 @@ const New = () => {
                     <br/>
                     {tabState === 0 &&
                         <RawText
-                            key={JSON.stringify(curlState)}
                             curlState={curlState}
                             setCurlState={handleSetCurlState} />
                     }
                     {tabState === 1 &&
                         <KeyValue
-                            key={JSON.stringify(curlState)}
                             curlState={curlState}
                             setCurlState={handleSetCurlState} />
                     }

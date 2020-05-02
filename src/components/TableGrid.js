@@ -12,7 +12,7 @@ const getMinHeigth = number => {
 
 const getDefaultData = (arrayData, keys) => {
 
-    const newData = [ ...arrayData ];
+    const newData = [...arrayData];
 
     let fulledRow = 0
     newData.forEach(data => {
