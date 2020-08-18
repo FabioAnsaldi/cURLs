@@ -68,7 +68,7 @@ const DataForm = props => {
     return (
         <div className="dataform-component">
             <x-radios>
-                <x-box>
+                <x-box class="__data">
                     <div className="__radio">
                         <x-radio onClick={handleTabClick} data-index="0" id="data-radio" {...getToggledState(0, tabSelected)}></x-radio>
                         <x-label for="data-radio" id="data-label">Data</x-label>
@@ -76,6 +76,12 @@ const DataForm = props => {
                     <div className="__radio">
                         <x-radio onClick={handleTabClick} data-index="1" id="data-binary-radio" {...getToggledState(1, tabSelected)}></x-radio>
                         <x-label for="data-binary-radio" id="data-binary-label">Data-Binary</x-label>
+                    </div>
+                </x-box>
+                <x-box class="__json">
+                    <div className="__content">
+                        <x-label class="__label">JSON view</x-label>
+                        <x-switch></x-switch>
                     </div>
                 </x-box>
             </x-radios>

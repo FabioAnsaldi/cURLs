@@ -1,6 +1,8 @@
 @import 'theme';
 
 .new-component {
+    display: inline-block;
+    width: 100%;
     
     .submit {
         display: flex;

@@ -5,17 +5,35 @@
     width: 100%;
 
     x-radios {
-        display: block;
+        display: flex;
         margin-bottom: $base_margin;
         
-        x-box {
-            display: inline-block;
-            width: 25%;
+        .__data {
+            display: flex;
+            width: 50%;
 
             .__radio {
                 display: inline-flex;
+                justify-content: flex-start;
                 align-items: center;
-                width: 50%;
+                width: 25%;
+            }
+        }
+
+        .__json {
+            display: flex;
+            width: 50%;
+            justify-content: flex-end;
+
+            .__content {
+                display: inline-flex;
+                justify-content: flex-end;
+                align-items: center;
+                width: 30%;
+
+                .__label {
+                    margin-right: $base_margin;
+                }
             }
         }
     }
